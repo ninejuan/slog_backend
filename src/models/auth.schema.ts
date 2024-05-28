@@ -1,7 +1,7 @@
 import mongo from 'mongoose';
 
 const authSchema = new mongo.Schema({
-    slogId: { type: String, required: true }, // url param에 사용 (content 시청 시)
+    slogId: { type: Number, required: true }, // url param에 사용 (content 시청 시)
     providerData: {
         email: { type: String, required: true, unique: true },
         name: { type: String, required: true },

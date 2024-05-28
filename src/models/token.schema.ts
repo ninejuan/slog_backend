@@ -4,8 +4,8 @@ import mongo from 'mongoose';
 const tokenSchema = new mongo.Schema({
     slogId: { type: Number, required: true }, // 모든 토큰은 암호화 필요. (jwt 사용?)
     providerData: {
-        RefreshToken: { type: String, required: true },
-        AccessToken: { type: String, required: true },
+        refToken: { type: String, required: true },
+        acToken: { type: String, required: true },
     }
     // 이대로 jwt에서 로드
 });
