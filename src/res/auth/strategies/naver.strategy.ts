@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { Profile, Strategy, VerifyCallback } from 'passport-naver';
 import { config } from 'dotenv';
 import authSchema from 'src/models/auth.schema';
 import tokenSchema from 'src/models/token.schema';
@@ -15,7 +15,7 @@ config();
 const env = process.env;
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+export class GoogleStrategy extends PassportStrategy(Strategy, 'naver') {
     constructor() {
         super({
             clientID: env.GOOGLE_CLIENT_ID,
@@ -29,9 +29,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
         const user = await authSchema.findOne({
             providerData: {
-                provider: 'google',
                 email: profile.email[0].value,
-                uid: profile.id,
+                uid: profile.id
             }
         });
         try {
@@ -66,7 +65,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                 slogId: user.slogId,
                 token: Tkn,
                 providerData: {
-                    provider: 'google',
                     refToken: refreshToken,
                     acToken: accessToken
                 }

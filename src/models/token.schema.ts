@@ -5,6 +5,7 @@ const tokenSchema = new mongo.Schema({
     slogId: { type: Number, required: true },
     token: { type: String, required: true },
     providerData: {
+        provider: { type: String, required: true },
         refToken: { type: String, required: true },
         acToken: { type: String, required: true },
     }
