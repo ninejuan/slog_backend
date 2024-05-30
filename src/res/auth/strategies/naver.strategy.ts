@@ -15,22 +15,20 @@ config();
 const env = process.env;
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'naver') {
+export class NaverStrategy extends PassportStrategy(Strategy, 'naver') {
     constructor() {
         super({
-            clientID: env.GOOGLE_CLIENT_ID,
-            clientSecret: env.GOOGLE_CLIENT_SECRET,
-            callbackURL: `https://${env.DOMAIN}${env.GOOGLE_REDIRECT_PARAM}`,
-            passReqToCallback: true,
-            scope: ['profile', 'email'],
+            clientID: env.NAVER_CLIENT_ID,
+            clientSecret: env.NAVER_CLIENT_SECRET,
+            callbackURL: `https://${env.DOMAIN}${env.NAVER_REDIRECT_PARAM}`,
         });
     }
 
-    async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
+    async validate(accessToken: string, refreshToken: string, profile: any, done: any): Promise<any> {
         const user = await authSchema.findOne({
             providerData: {
-                email: profile.email[0].value,
-                uid: profile.id
+                provider: 'naver',
+                email: profile._json.email,
             }
         });
         try {
@@ -38,23 +36,27 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'naver') {
                 await tokenSchema.findOneAndDelete({
                     slogId: user.slogId
                 });
-                if (user.providerData.name !== profile.displayName || user.profilePhoto !== profile.photos[0].value.replace(/sz=50/gi, 'sz=250')) {
-                    user.providerData.name = profile.displayName;
-                    user.profilePhoto = profile.photos[0].value.replace(/sz=50/gi, 'sz=250');
+                if (user.providerData.name !== profile._json.nickname || user.profilePhoto !== profile._json.profile_image) {
+                    user.providerData.name = profile._json.nickname;
+                    user.profilePhoto = profile._json.profile_image;
                     await user.save();
                 }
             } else {
                 let slogId = await genIdUtil();
                 const newAcc: Auth = {
+                    /**
+                     * 네이버는 uid 따위는 주지 않음.
+                     * 어떻게 해야 할 것인가.
+                     * 걍 uid는 상남자답게 패스한다.
+                     */
                     slogId: slogId,
-                    slogNick: profile.displayName,
+                    slogNick: profile._json.nickname,
                     providerData: {
-                        provider: 'google',
-                        email: profile.email[0].value,
-                        name: profile.displayName,
-                        uid: profile.id
+                        provider: 'naver',
+                        email: profile._json.email,
+                        name: profile._json.nickname
                     },
-                    profilePhoto: profile.photos[0].value.replace(/sz=50/gi, 'sz=250'),
+                    profilePhoto: profile._json.profile_photo,
                     createdAt: Date.now(),
                     updatedAt: Date.now()
                 }
@@ -65,6 +67,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'naver') {
                 slogId: user.slogId,
                 token: Tkn,
                 providerData: {
+                    provider: 'naver',
                     refToken: refreshToken,
                     acToken: accessToken
                 }

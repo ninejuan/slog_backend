@@ -5,7 +5,7 @@ interface Auth {
         provider: String;
         email: String;
         name: String;
-        uid: String;
+        uid?: String;
     };
     profilePhoto?: String;
     createdAt: Number;

@@ -7,7 +7,7 @@ const authSchema = new mongo.Schema({
         provider: { type: String, required: true }, // google, naver, kakao
         email: { type: String, required: true, unique: true },
         name: { type: String, required: true },
-        uid: { type: String, required: true }
+        uid: { type: String }
     },
     profilePhoto: { type: String, default: "none"}, // none인 경우 FE단에서 기본 프로필 로드
     createdAt: { type: Number, required: true },
