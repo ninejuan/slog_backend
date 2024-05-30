@@ -1,13 +1,15 @@
 interface Auth {
-    slogId: Number;
+    slogId?: Number;
+    slogNick?: String;
     providerData: {
+        provider: String;
         email: String;
         name: String;
         uid: String;
     };
     profilePhoto?: String;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Number;
+    updatedAt: Number;
 };
 
 export default Auth;

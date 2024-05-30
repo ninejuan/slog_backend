@@ -2,12 +2,15 @@ import mongo from 'mongoose';
 
 // 내용 추가하기
 const tokenSchema = new mongo.Schema({
-    slogId: { type: Number, required: true }, // 모든 토큰은 암호화 필요. (jwt 사용?)
+    slogId: { type: Number, required: true },
+    token: { type: String, required: true },
     providerData: {
         refToken: { type: String, required: true },
         acToken: { type: String, required: true },
     }
     // 이대로 jwt에서 로드
+}, {
+    expireAfterSeconds: 1000 * 60 * 60 * 24 * 7
 });
 
 /**
