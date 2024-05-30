@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy, VerifyCallback } from 'passport-naver';
+import { Profile, Strategy, VerifyCallback } from 'passport-naver-v2';
 import { config } from 'dotenv';
 import authSchema from 'src/models/auth.schema';
 import tokenSchema from 'src/models/token.schema';
@@ -28,7 +28,7 @@ export class NaverStrategy extends PassportStrategy(Strategy, 'naver') {
         const user = await authSchema.findOne({
             providerData: {
                 provider: 'naver',
-                email: profile._json.email,
+                email: profile.email,
             }
         });
         try {
@@ -36,9 +36,9 @@ export class NaverStrategy extends PassportStrategy(Strategy, 'naver') {
                 await tokenSchema.findOneAndDelete({
                     slogId: user.slogId
                 });
-                if (user.providerData.name !== profile._json.nickname || user.profilePhoto !== profile._json.profile_image) {
-                    user.providerData.name = profile._json.nickname;
-                    user.profilePhoto = profile._json.profile_image;
+                if (user.providerData.name !== profile.nickname || user.profilePhoto !== profile.profile_image) {
+                    user.providerData.name = profile.nickname;
+                    user.profilePhoto = profile.profile_image;
                     await user.save();
                 }
             } else {
@@ -50,13 +50,14 @@ export class NaverStrategy extends PassportStrategy(Strategy, 'naver') {
                      * 걍 uid는 상남자답게 패스한다.
                      */
                     slogId: slogId,
-                    slogNick: profile._json.nickname,
+                    slogNick: profile.nickname,
                     providerData: {
                         provider: 'naver',
-                        email: profile._json.email,
-                        name: profile._json.nickname
+                        email: profile.email,
+                        name: profile.name,
+                        uid: profile.id
                     },
-                    profilePhoto: profile._json.profile_photo,
+                    profilePhoto: profile.profile_photo,
                     createdAt: Date.now(),
                     updatedAt: Date.now()
                 }
