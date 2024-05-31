@@ -14,29 +14,6 @@ import Token from 'src/interface/token.interface';
 
 @Injectable()
 export class AuthService {
-        async logIn(user: Auth, token: Token) {
-        // register user token (expires in 1 weeks)
-        const userTkn = await this.genTkn();
-        await new tokenSchema({
-            slogId: user.slogId,
-            token: userTkn,
-            providerData: {
-                acToken: token
-            }
-        })
-    }
-
-    async validateUser(provider: string, email: string, uid: string) {
-        const user = await authSchema.findOne({
-            providerData: {
-                provider: provider,
-                email: email,
-                uid: uid
-            }
-        });
-        return user ?? 1; // code validating 필요
-    }
-
     async deleteUser(slogId: Number, provider: string, email: string, uid: string) { // DELETE Method
         await authSchema.deleteOne({
             slogId: slogId,
