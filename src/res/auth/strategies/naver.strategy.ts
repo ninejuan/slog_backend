@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy, VerifyCallback } from 'passport-naver-v2';
+import { Profile, Strategy } from 'passport-naver-v2';
 import { config } from 'dotenv';
 import authSchema from 'src/models/auth.schema';
 import tokenSchema from 'src/models/token.schema';
