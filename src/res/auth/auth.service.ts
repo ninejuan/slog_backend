@@ -14,15 +14,7 @@ import Token from 'src/interface/token.interface';
 
 @Injectable()
 export class AuthService {
-    private async genTkn() { // make User Token (BE -> FE)
-        const fgen = crypto.randomUUID();
-        const vTkn = await tokenSchema.findOne({
-            token: fgen
-        });
-        return (!vTkn) ? fgen : this.genTkn()
-    }
-
-    async logIn(user: Auth, token: Token) {
+        async logIn(user: Auth, token: Token) {
         // register user token (expires in 1 weeks)
         const userTkn = await this.genTkn();
         await new tokenSchema({
@@ -43,38 +35,6 @@ export class AuthService {
             }
         });
         return user ?? 1; // code validating 필요
-    }   
-
-    async registerUser(user: Auth) {
-        const newId = await this.logIn();
-        await new authSchema({
-            slogId: newId,
-            providerData: {
-                provider: user.providerData.provider,
-                email: user.providerData.email,
-                name: user.providerData.name,
-                uid: user.providerData.uid
-            },
-            profilePhoto: user.profilePhoto,
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-        }).save().then(() => {
-            return newId;
-        }).catch((e) => {
-            console.error(e);
-            return 1;
-        })
-    }
-
-    async updateUser(slogId: Number, provider: string, uid: string, newData: Auth) { // PATCH Method Req
-        const user = await authSchema.findOneAndUpdate({
-            slogId: slogId,
-            providerData: {
-                provider: provider,
-                uid: uid
-            }
-        }, newData);
-        
     }
 
     async deleteUser(slogId: Number, provider: string, email: string, uid: string) { // DELETE Method
