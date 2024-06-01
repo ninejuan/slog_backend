@@ -1,5 +1,6 @@
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Redirect, Res, UseFilters, UseGuards } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guards/google.guard';
 import { CallbackUserData } from './decorator/auth.decorator';
@@ -19,7 +20,7 @@ export class AuthController {
 	) {
 		console.log(userData);
 		// console.log(res);
-		return Redirect('/', 302);
+		res.redirect('/');
 	}
 
 	@Get('/hi')
