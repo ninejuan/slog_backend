@@ -5,7 +5,7 @@ const authSchema = new mongo.Schema({
     slogNick: { type: String, required: true },
     providerData: {
         provider: { type: String, required: true }, // google, naver, kakao
-        email: { type: String, required: true, unique: true },
+        email: { type: String, required: true },
         name: { type: String, required: true },
         uid: { type: String }
     },

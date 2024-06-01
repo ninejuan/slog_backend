@@ -1,5 +1,5 @@
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Res, UseFilters, UseGuards } from '@nestjs/common';
+import { Controller, Get, Redirect, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guards/google.guard';
 import { CallbackUserData } from './decorator/auth.decorator';
@@ -18,7 +18,8 @@ export class AuthController {
 		@Res() res: Response,
 	) {
 		console.log(userData);
-		console.log(res);
+		// console.log(res);
+		return Redirect('/', 302);
 	}
 
 	@Get('/hi')

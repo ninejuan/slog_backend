@@ -10,6 +10,7 @@ import Token from 'src/interface/token.interface';
 import tokenData from 'src/interface/tokenData.interface';
 import genIdUtil from 'src/utils/genId.util';
 import genTknUtil from 'src/utils/genTkn.util';
+import { access } from 'fs';
 config();
 
 const env = process.env;
@@ -20,42 +21,51 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         super({
             clientID: env.GOOGLE_CLIENT_ID,
             clientSecret: env.GOOGLE_CLIENT_SECRET,
-            callbackURL: `https://${env.DOMAIN}${env.GOOGLE_REDIRECT_PARAM}`,
-            passReqToCallback: true,
+            callbackURL: `${env.HTTP_PROTOCOL}://${env.DOMAIN}${env.GOOGLE_REDIRECT_PARAM}`,
             scope: ['profile', 'email'],
+            accessType: 'offline',
+            prompt: 'consent'
         });
     }
+
+    // async validate(act, reft, pf, dn) {
+    //     console.log(pf);
+    //     dn(null, pf);
+    // }
 
     async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
         const user = await authSchema.findOne({
             providerData: {
-                provider: 'google',
-                email: profile.email[0].value,
+                provider: profile.provider,
+                email: profile._json.email,
+                name: profile.displayName,
                 uid: profile.id,
             }
         });
         try {
+            let slogId: Number;
             if (user) {
+                slogId = user.slogId;
                 await tokenSchema.findOneAndDelete({
                     slogId: user.slogId
                 });
-                if (user.providerData.name !== profile.displayName || user.profilePhoto !== profile.photos[0].value.replace(/sz=50/gi, 'sz=250')) {
+                if (user.providerData.name !== profile.displayName || user.profilePhoto !== profile._json.picture.replace(/sz=50/gi, 'sz=250')) {
                     user.providerData.name = profile.displayName;
-                    user.profilePhoto = profile.photos[0].value.replace(/sz=50/gi, 'sz=250');
+                    user.profilePhoto = profile._json.picture.replace(/sz=50/gi, 'sz=250');
                     await user.save();
                 }
             } else {
-                let slogId = await genIdUtil();
+                slogId = await genIdUtil();
                 const newAcc: Auth = {
                     slogId: slogId,
                     slogNick: profile.displayName,
                     providerData: {
-                        provider: 'google',
-                        email: profile.email[0].value,
+                        provider: profile.provider,
+                        email: profile._json.email,
                         name: profile.displayName,
                         uid: profile.id
                     },
-                    profilePhoto: profile.photos[0].value.replace(/sz=50/gi, 'sz=250'),
+                    profilePhoto: profile._json.picture.replace(/sz=50/gi, 'sz=250'),
                     createdAt: Date.now(),
                     updatedAt: Date.now()
                 }
@@ -63,22 +73,23 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             }
             let Tkn = await genTknUtil();
             const newTkn: Token = {
-                slogId: user.slogId,
+                slogId: slogId,
                 token: Tkn,
                 providerData: {
-                    provider: 'google',
-                    refToken: refreshToken,
+                    provider: profile.provider,
+                    refToken: refreshToken ?? "none",
                     acToken: accessToken
                 }
             };
             const regTkn: tokenData = {
-                slogId: user.slogId,
+                slogId: slogId,
                 token: Tkn
             }
             await new tokenSchema(newTkn).save();
             await new tokenDataSchema(regTkn).save();
             done(null, regTkn);
         } catch (err) {
+            console.error(err);
             done(err, false);
         }
     }

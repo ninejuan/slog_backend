@@ -7,7 +7,7 @@ const env = process.env;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  linkToDatabase();
   if (env.MODE == "DEV") {
 		try {
 			setupSwagger(app);
@@ -16,7 +16,6 @@ async function bootstrap() {
 			console.error(e);
 		}
 	}
-  linkToDatabase();
   await app.listen(3000);
 }
 bootstrap();

@@ -1,5 +1,5 @@
 import tokenSchema from "src/models/token.schema";
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 async function genTkn() { // make User Token (BE -> FE)
     const fgen = crypto.randomUUID();
