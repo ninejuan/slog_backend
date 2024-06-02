@@ -22,18 +22,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             clientID: env.GOOGLE_CLIENT_ID,
             clientSecret: env.GOOGLE_CLIENT_SECRET,
             callbackURL: `${env.HTTP_PROTOCOL}://${env.DOMAIN}${env.GOOGLE_REDIRECT_PARAM}`,
-            scope: ['profile', 'email'],
-            accessType: 'offline',
-            prompt: 'consent'
+            scope: ['profile', 'email']
         });
     }
 
-    // async validate(act, reft, pf, dn) {
-    //     console.log(pf);
-    //     dn(null, pf);
-    // }
-
+    authorizationParams(): { [key: string]: string; } {
+        return ({
+          access_type: 'offline'
+        });
+      };
+      
     async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
+        console.log(`strategy - refTkn - ${refreshToken}`)
         const user = await authSchema.findOne({
             providerData: {
                 provider: profile.provider,
