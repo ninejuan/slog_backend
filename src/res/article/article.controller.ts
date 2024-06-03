@@ -12,9 +12,11 @@ export class ArticleController {
   @Get('/hi')
   @UseGuards(GoogleAuthGuard)
   async hi(@CallbackUserData() user) {
-    
+    return 'ii'
   }
 
+
+  @UseGuards(GoogleAuthGuard)
   @Post()
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articleService.create(createArticleDto);

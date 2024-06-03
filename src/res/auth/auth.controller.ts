@@ -20,11 +20,6 @@ export class AuthController {
 	) {
 		res.redirect('/');
 	}
-
-	@Get('/hi')
-	async hi() {
-		return 'hi';
-	}
 }
 
 /**

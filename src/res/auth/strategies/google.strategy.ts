@@ -25,11 +25,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         });
     }
 
-    // authorizationParams(): { [key: string]: string; } {
-    //     return ({
-    //         access_type: 'offline'
-    //     });
-    // };
+    authorizationParams(): { [key: string]: string; } {
+        return ({
+            access_type: 'offline'
+        });
+    };
 
     private async delToken(slogId: Number) {
         await tokenDataSchema.deleteMany({
@@ -87,7 +87,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                 const existToken = await tokenDataSchema.findOne({
                     slogId: slogId
                 });
-                console.log('ext'+existToken);
                 if (refreshToken) { // 기존 토큰이 모종의 이유로 인해 만료된 경우 or refreshToken이 업데이트된 경우
                     this.delToken(slogId);
                     let Tkn = await genTknUtil();
