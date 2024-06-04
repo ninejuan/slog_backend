@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import Comments from 'src/interface/comments.interface';
+import articleSchema from 'src/models/article/article.schema';
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: Comments) {
-    return 'This action adds a new comment';
+  async create(newComment: Comments) {
+    const article = await articleSchema.findOne({
+      articleId: newComment.articleId
+    });
+    if (article.comments.find(data => data.writer == newComment.writer)) {
+      return false
+    }
   }
 
   findAll() {
@@ -15,11 +21,11 @@ export class CommentsService {
     return `This action returns a #${id} comment`;
   }
 
-  update(id: number, updateCommentDto: Comments) {
+  update(id: number, updateComment: Comments) {
     return `This action updates a #${id} comment`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} comment`;
+    
   }
 }

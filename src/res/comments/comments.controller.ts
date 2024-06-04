@@ -9,8 +9,8 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) { }
 
   @Post()
-  create(@Body() createCommentDto: Comments) {
-    return this.commentsService.create(createCommentDto);
+  create(@Body() newComment: Comments) {
+    return this.commentsService.create(newComment);
   }
 
   @Get()
@@ -21,11 +21,6 @@ export class CommentsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.commentsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: Comments) {
-    return this.commentsService.update(+id, updateCommentDto);
   }
 
   @Delete(':id')

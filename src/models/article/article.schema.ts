@@ -1,6 +1,6 @@
 import mongo from 'mongoose';
 
-const commentSchema = new mongo.Schema({
+    const commentSchema = new mongo.Schema({
     writer: { type: Number, required: true }, // slogId
     createdAt: { type: Number, required: true }, // Date.now() 형식, ms type
     content: { type: String, required: true }

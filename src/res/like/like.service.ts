@@ -8,7 +8,7 @@ export class LikeService {
     const article = await articleSchema.findOne({
       articleId: newLike.articleId
     });
-    if (article.likes.indexOf(newLike.likerId)) {
+    if (article.likes.indexOf(newLike.likerId) >= 0) {
       return false;
     } else {
       article.likes[article.likes.length] = newLike.likerId;
@@ -25,7 +25,7 @@ export class LikeService {
     const article = await articleSchema.findOne({
       articleId: newLike.articleId
     });
-    if (!article.likes.indexOf(newLike.likerId)) {
+    if (article.likes.indexOf(newLike.likerId) == -1) {
       return false;
     } else {
       let i = article.likes.indexOf(newLike.likerId);
