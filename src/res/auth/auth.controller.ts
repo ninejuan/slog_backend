@@ -7,6 +7,7 @@ import { CallbackUserData } from './decorator/auth.decorator';
 import Auth from 'src/interface/auth.interface';
 import Token from 'src/interface/token.interface';
 
+@ApiTags("Authentication")
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) { }

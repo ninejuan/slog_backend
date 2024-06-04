@@ -1,9 +1,5 @@
 import mongo from 'mongoose';
 
-const imageSchema = new mongo.Schema({
-    imgDir: { type: String, required: true }
-});
-
 const commentSchema = new mongo.Schema({
     writer: { type: Number, required: true }, // slogId
     createdAt: { type: Number, required: true }, // Date.now() 형식, ms type
@@ -15,7 +11,7 @@ const articleSchema = new mongo.Schema({
     articleId: { type: Number, required: true },
     title: { type: String }, // unrequired data
     content: { type: String, required: true },
-    images: [ imageSchema ],
+    images: { type: Array, required: true },
     likes: { type: Array, required: true }, // String Data, `${user_id}`
     comments: [ commentSchema ],
     category: { type: String, required: true }, // String Data, `${category}` ex) "디자인", "사회"

@@ -2,39 +2,44 @@ import { Injectable } from '@nestjs/common';
 import articleSchema from '../../models/article/article.schema';
 import Article from 'src/interface/article.interface';
 import genAIdUtil from 'src/utils/genArticleId.util';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class ArticleService {
   async create(newArticleData: Article) {
-    const gen = await genAIdUtil();
+    let arid = await genAIdUtil();
     await new articleSchema({
       writerId: newArticleData.writerId,
-      articleId: gen,
+      articleId: arid,
       title: newArticleData.title,
       content: newArticleData.content,
-      // images:
+      images: newArticleData.images,
       likes: 0,
       comments: null,
-      categories: newArticleData.categories,
+      category: newArticleData.category,
       createdAt: Date.now(),
       editData: {
         isEdited: false
       }
+    }).save();
+    return arid;
+  }
+
+  async getIdsByCount(count: number) {
+    let returnArr = [];
+    const get = await articleSchema.find();
+    for (let i = 0; i < count; i++) {
+      const rand = crypto.randomInt(0, get.length-1);
+      returnArr[i] = get[rand].articleId;
+    }
+    return returnArr;
+  }
+
+  async getById(id: number) {
+    const res = await articleSchema.findOne({
+      articleId: id
     });
-    return gen;
-  }
-
-  async findCount(num: number, cate: string) {
-    const find = await articleSchema.find()
-    
-  }
-
-  findAll() {
-    return `This action returns all article`;
-  }
-
-  findOne(id: number) {
-    
+    return res;
   }
 
   async update(id: number, updateData: Article) {

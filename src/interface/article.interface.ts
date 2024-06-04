@@ -3,16 +3,14 @@ interface Article {
     articleId?: Number;
     title?: String;
     content: String;
-    images: [{
-        imgDir: String;
-    }];
+    images: Array<String>;
     likes: Array<Number>;
     comments?: {
         writer: Number;
         createdAt: Number;
         content: String;
     };
-    categories: Array<Number>;
+    category: Array<Number>;
     createdAt: Number;
     editData: {
         isEdited: Boolean;

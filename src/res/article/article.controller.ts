@@ -2,46 +2,40 @@ import { Controller, Get, Post, Body, Patch, Put, Param, Delete, UseGuards, Inje
 import { ArticleService } from './article.service';
 import { GoogleAuthGuard } from '../auth/guards/google.guard';
 import { CallbackUserData } from '../auth/decorator/auth.decorator';
-import { checkAuth } from '../auth/decorator/checkAuth.decorator';
+import { AuthGuard } from '../auth/guards/checkAuth.guard';
 import Article from 'src/interface/article.interface';
 import { ExecutionContext } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 // Auth 검증은 살짝 미루기
+@ApiTags("Article CRUD")
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
-  
-  // @Get('/hi')
-  // @checkAuth()
-  // // @UseGuards(GoogleAuthGuard)
-  // async hi(@CallbackUserData() user) {
 
-  // }
-
-
-  @UseGuards(GoogleAuthGuard)
+  // @UseGuards(AuthGuard)
   @Post()
   create(@Body() newArticleData: Article) {
     return this.articleService.create(newArticleData);
   }
 
-  @Get(':count')
-  findAll() {
-    return this.articleService.findCount();
+  @Get('/lists/:count')
+  getIdsByCount(@Param('count') count: number) {
+    return this.articleService.getIdsByCount(+count);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articleService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.articleService.getById(+id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateData: Article) {
+  update(@Param('id') id: number, @Body() updateData: Article) {
     return this.articleService.update(+id, updateData);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: Number) {
+  remove(@Param('id') id: number) {
     return this.articleService.remove(+id);
   }
 }
