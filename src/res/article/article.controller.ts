@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Injectable } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Put, Param, Delete, UseGuards, Injectable } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { GoogleAuthGuard } from '../auth/guards/google.guard';
 import { CallbackUserData } from '../auth/decorator/auth.decorator';
@@ -11,12 +11,12 @@ import { ExecutionContext } from '@nestjs/common';
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
   
-  @Get('/hi')
-  @checkAuth()
-  // @UseGuards(GoogleAuthGuard)
-  async hi(@CallbackUserData() user) {
+  // @Get('/hi')
+  // @checkAuth()
+  // // @UseGuards(GoogleAuthGuard)
+  // async hi(@CallbackUserData() user) {
 
-  }
+  // }
 
 
   @UseGuards(GoogleAuthGuard)
@@ -25,9 +25,9 @@ export class ArticleController {
     return this.articleService.create(newArticleData);
   }
 
-  @Get()
+  @Get(':count')
   findAll() {
-    return this.articleService.findAll();
+    return this.articleService.findCount();
   }
 
   @Get(':id')
@@ -35,9 +35,9 @@ export class ArticleController {
     return this.articleService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArticleDto: Article) {
-    return this.articleService.update(+id, updateArticleDto);
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateData: Article) {
+    return this.articleService.update(+id, updateData);
   }
 
   @Delete(':id')

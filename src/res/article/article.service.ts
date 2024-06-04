@@ -24,16 +24,28 @@ export class ArticleService {
     return gen;
   }
 
+  async findCount(num: number, cate: string) {
+    const find = await articleSchema.find()
+    
+  }
+
   findAll() {
     return `This action returns all article`;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} article`;
+    
   }
 
-  update(id: number, updateArticleDto: Article) {
-    return `This action updates a #${id} article`;
+  async update(id: number, updateData: Article) {
+    const update = await articleSchema.findOneAndUpdate({
+      articleId: id
+    }, updateData).then(() => {
+      return id;
+    }).catch((e) => {
+      console.error(e);
+      return false;
+    })
   }
 
   async remove(id: number) {

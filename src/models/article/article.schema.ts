@@ -18,7 +18,7 @@ const articleSchema = new mongo.Schema({
     images: [ imageSchema ],
     likes: { type: Array, required: true }, // String Data, `${user_id}`
     comments: [ commentSchema ],
-    categories: { type: Array, required: true }, // String Data, `${category}` ex) "디자인", "사회"
+    category: { type: String, required: true }, // String Data, `${category}` ex) "디자인", "사회"
     createdAt: { type: Number, required: true }, // Date.now() 형식(ms type)
     editData: {
         isEdited: { type: Boolean, required: true },
