@@ -23,8 +23,8 @@ export class CommentsController {
     return this.commentsService.findOne(+id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentsService.remove(+id);
+  @Delete()
+  remove(@Body() cmts: Comments) {
+    return this.commentsService.remove(cmts);
   }
 }
