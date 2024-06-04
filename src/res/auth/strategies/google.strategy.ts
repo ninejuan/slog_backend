@@ -8,7 +8,7 @@ import tokenDataSchema from 'src/models/tokendata.schema';
 import Auth from 'src/interface/auth.interface';
 import Token from 'src/interface/token.interface';
 import tokenData from 'src/interface/tokenData.interface';
-import genIdUtil from 'src/utils/genId.util';
+import genIdUtil from 'src/utils/genUserId.util';
 import genTknUtil from 'src/utils/genTkn.util';
 config();
 

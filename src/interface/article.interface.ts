@@ -1,11 +1,11 @@
 interface Article {
     writerId: Number;
-    articleId: Number;
+    articleId?: Number;
     title?: String;
     content: String;
-    images: {
+    images: [{
         imgDir: String;
-    };
+    }];
     likes: Array<Number>;
     comments?: {
         writer: Number;
@@ -19,3 +19,5 @@ interface Article {
         editedAt?: Number;
     };
 }
+
+export default Article;

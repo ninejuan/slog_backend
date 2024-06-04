@@ -1,25 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Injectable } from '@nestjs/common';
 import { ArticleService } from './article.service';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { UpdateArticleDto } from './dto/update-article.dto';
 import { GoogleAuthGuard } from '../auth/guards/google.guard';
 import { CallbackUserData } from '../auth/decorator/auth.decorator';
+import { checkAuth } from '../auth/decorator/checkAuth.decorator';
+import Article from 'src/interface/article.interface';
+import { ExecutionContext } from '@nestjs/common';
 
+// Auth 검증은 살짝 미루기
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
   
   @Get('/hi')
-  @UseGuards(GoogleAuthGuard)
+  @checkAuth()
+  // @UseGuards(GoogleAuthGuard)
   async hi(@CallbackUserData() user) {
-    return 'ii'
+
   }
 
 
   @UseGuards(GoogleAuthGuard)
   @Post()
-  create(@Body() createArticleDto: CreateArticleDto) {
-    return this.articleService.create(createArticleDto);
+  create(@Body() newArticleData: Article) {
+    return this.articleService.create(newArticleData);
   }
 
   @Get()
@@ -33,12 +36,12 @@ export class ArticleController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
+  update(@Param('id') id: string, @Body() updateArticleDto: Article) {
     return this.articleService.update(+id, updateArticleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: Number) {
     return this.articleService.remove(+id);
   }
 }
