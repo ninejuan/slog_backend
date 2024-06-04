@@ -9,12 +9,12 @@ export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
   @Post()
-  create(@Body() newLike: Like) {
-    return this.likeService.create(newLike);
+  async add(@Body() newLike: Like) {
+    return this.likeService.add(newLike);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.likeService.remove(+id);
+  @Delete()
+  async remove(@Body() newLike: Like) {
+    return this.likeService.remove(newLike);
   }
 }
