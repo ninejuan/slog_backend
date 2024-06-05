@@ -3,7 +3,7 @@ import mongo from 'mongoose';
 const authSchema = new mongo.Schema({
     slogId: { type: Number, required: true }, // url param에 사용 (content 시청 시)
     slogNick: { type: String },
-    desc: { type: String },
+    desc: { type: String }, // user description
     providerData: {
         email: { type: String, required: true },
         name: { type: String, required: true },
