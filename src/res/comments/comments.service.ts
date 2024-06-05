@@ -3,6 +3,7 @@ import mongo from 'mongoose';
 import Comments from 'src/interface/comments.interface';
 import articleSchema from 'src/models/article/article.schema';
 import commentSchema from 'src/models/article/comment.schema';
+import checkXSS from 'src/utils/checkXSS.util';
 
 @Injectable()
 export class CommentsService {
@@ -10,7 +11,7 @@ export class CommentsService {
     await new commentSchema({
       articleId: newComment.articleId,
       writerId: newComment.writerId,
-      content: newComment.content,
+      content: await checkXSS(newComment.content),
       createdAt: Date.now()
     }).save().then(() => {
       return true;

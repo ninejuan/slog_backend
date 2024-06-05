@@ -6,6 +6,7 @@ import { AuthGuard } from '../auth/guards/checkAuth.guard';
 import Article from 'src/interface/article.interface';
 import { ExecutionContext } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import checkXSS from 'src/utils/checkXSS.util';
 
 // Auth 검증은 살짝 미루기
 @ApiTags("Article CRUD")
@@ -19,7 +20,7 @@ export class ArticleController {
     return this.articleService.create(newArticleData);
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get('/lists/:count')
   getIdsByCount(@Param('count') count: number) {
     return this.articleService.getIdsByCount(+count);
@@ -31,7 +32,14 @@ export class ArticleController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() updateData: Article) {
+  async update(@Param('id') id: number, @Body() updateData: Article) {
+    updateData.title = (await checkXSS(updateData.title)).toString() ?? null;
+    updateData.content = (await checkXSS(updateData.content)).toString();
+    updateData.category = (await checkXSS(updateData.category)).toString();
+    updateData.editData = {
+      isEdited: true,
+      editedAt: Date.now()
+    }
     return this.articleService.update(+id, updateData);
   }
 

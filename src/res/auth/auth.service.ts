@@ -5,6 +5,7 @@ import authSchema from 'src/models/auth.schema';
 import Auth from 'src/interface/auth.interface';
 import tokenData from 'src/interface/token.interface';
 import Token from 'src/interface/token.interface';
+import checkXSS from 'src/utils/checkXSS.util';
 
 /**
  * response code

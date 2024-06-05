@@ -5,7 +5,7 @@ interface Article {
     content: String;
     images: Array<String>;
     likes: Array<Number>;
-    category: Array<Number>;
+    category: String;
     createdAt: Number;
     editData: {
         isEdited: Boolean;

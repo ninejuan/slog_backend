@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import articleSchema from '../../models/article/article.schema';
 import Article from 'src/interface/article.interface';
 import genAIdUtil from 'src/utils/genArticleId.util';
+import checkXSSUtil from 'src/utils/checkXSS.util';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -11,12 +12,11 @@ export class ArticleService {
     await new articleSchema({
       writerId: newArticleData.writerId,
       articleId: arid,
-      title: newArticleData.title,
-      content: newArticleData.content,
+      title: await checkXSSUtil(newArticleData.title),
+      content: await checkXSSUtil(newArticleData.content),
       images: newArticleData.images,
       likes: 0,
-      comments: [],
-      category: newArticleData.category,
+      category: await checkXSSUtil(newArticleData.category),
       createdAt: Date.now(),
       editData: {
         isEdited: false
