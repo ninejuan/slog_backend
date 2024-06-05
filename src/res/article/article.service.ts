@@ -15,7 +15,7 @@ export class ArticleService {
       content: newArticleData.content,
       images: newArticleData.images,
       likes: 0,
-      comments: null,
+      comments: [],
       category: newArticleData.category,
       createdAt: Date.now(),
       editData: {

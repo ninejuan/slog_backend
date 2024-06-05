@@ -9,18 +9,13 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) { }
 
   @Post()
-  create(@Body() newComment: Comments) {
+  async create(@Body() newComment: Comments) {
     return this.commentsService.create(newComment);
   }
 
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentsService.findOne(+id);
+  findAll(@Param('id') id: string) {
+    return this.commentsService.findAll(+id);
   }
 
   @Delete()
