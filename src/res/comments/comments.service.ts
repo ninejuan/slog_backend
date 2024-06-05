@@ -9,7 +9,7 @@ export class CommentsService {
   async create(newComment: Comments) {
     await new commentSchema({
       articleId: newComment.articleId,
-      writer: newComment.writer,
+      writerId: newComment.writerId,
       content: newComment.content,
       createdAt: Date.now()
     }).save().then(() => {
@@ -24,7 +24,7 @@ export class CommentsService {
     const res = await commentSchema.find({
       articleId: articleId
     });
-    return res;
+    return res.reverse();
   }
 
   /**
@@ -48,7 +48,7 @@ export class CommentsService {
   async remove(cmts: Comments) {
     await commentSchema.findOneAndDelete({
       articleId: cmts.articleId,
-      writer: cmts.writer,
+      writerId: cmts.writerId,
       content: cmts.content
     }).then(() => {
       return true;

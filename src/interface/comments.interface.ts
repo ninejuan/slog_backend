@@ -1,6 +1,6 @@
 interface Comments {
     articleId: Number;
-    writer: Number; // Writer's SLog Id
+    writerId: Number; // Writer's SLog Id
     createdAt?: Number;
     content: String;
 }
