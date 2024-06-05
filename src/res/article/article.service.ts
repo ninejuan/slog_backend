@@ -36,6 +36,7 @@ export class ArticleService {
   }
 
   async getById(id: number) {
+    if (isNaN(id)) return false;
     const res = await articleSchema.findOne({
       articleId: id
     });

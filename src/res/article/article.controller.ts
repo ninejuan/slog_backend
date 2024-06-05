@@ -19,6 +19,7 @@ export class ArticleController {
     return this.articleService.create(newArticleData);
   }
 
+  @UseGuards(AuthGuard)
   @Get('/lists/:count')
   getIdsByCount(@Param('count') count: number) {
     return this.articleService.getIdsByCount(+count);

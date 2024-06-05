@@ -19,6 +19,11 @@ export class AuthController {
 		@CallbackUserData() userData: any,
 		@Res() res: Response,
 	) {
+		res.cookie('slogtkn', userData.token, {
+			expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7),
+			sameSite: 'strict',
+			httpOnly: true
+		});
 		res.redirect('/');
 	}
 }
