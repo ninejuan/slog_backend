@@ -14,23 +14,25 @@ import checkXSS from 'src/utils/checkXSS.util';
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() newArticleData: Article) {
     return this.articleService.create(newArticleData);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('/lists/:count')
   getIdsByCount(@Param('count') count: number) {
     return this.articleService.getIdsByCount(+count);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return await this.articleService.getById(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   async update(@Param('id') id: number, @Body() updateData: Article) {
     updateData.title = (await checkXSS(updateData.title)).toString() ?? null;
@@ -43,6 +45,7 @@ export class ArticleController {
     return this.articleService.update(+id, updateData);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.articleService.remove(+id);

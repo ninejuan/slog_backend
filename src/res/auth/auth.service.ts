@@ -29,5 +29,22 @@ export class AuthService {
             throw new Error(e);
         })
     }
+
+    async changeNick(slogId: string, newNick: string) {
+        const user = await authSchema.findOne({
+            slogId: slogId
+        });
+        user.slogNick = newNick;
+        await user.save();
+        return slogId;
+    }
+
+    async changeDesc(slogId: Number, newDesc: String) {
+        const user = await authSchema.findOne({
+            slogId: slogId
+        });
+        user.desc = newDesc.toString();
+        await user.save();
+        return slogId;
+    }
 }
-    

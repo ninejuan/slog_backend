@@ -1,11 +1,17 @@
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Redirect, Res, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Redirect, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guards/google.guard';
 import { CallbackUserData } from './decorator/auth.decorator';
 import Auth from 'src/interface/auth.interface';
 import Token from 'src/interface/token.interface';
+import { AuthGuard } from './guards/checkAuth.guard';
+
+interface ChangeDesc {
+	slogId: Number;
+	newDesc: string;
+};
 
 @ApiTags("Authentication")
 @Controller('auth')
@@ -25,6 +31,20 @@ export class AuthController {
 			httpOnly: true
 		});
 		res.redirect('/');
+	}
+
+	@ApiExcludeEndpoint()
+	@UseGuards(AuthGuard)
+	@Patch('change/nick/:slogId/:newNick')
+	async changeNick(@Param('slogId') oldId: string, @Param('newNick') newId: string) {
+		return this.authService.changeNick(oldId, newId);
+	}
+
+	@ApiExcludeEndpoint()
+	@UseGuards(AuthGuard)
+	@Patch()
+	async changeDescription(@Body() newDesc: ChangeDesc) {
+		return this.authService.changeDesc(newDesc.slogId, newDesc.newDesc);
 	}
 }
 
