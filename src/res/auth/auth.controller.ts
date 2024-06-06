@@ -7,6 +7,10 @@ import { CallbackUserData } from './decorator/auth.decorator';
 import Auth from 'src/interface/auth.interface';
 import Token from 'src/interface/token.interface';
 import { AuthGuard } from './guards/checkAuth.guard';
+import dotenv from 'dotenv';
+dotenv.config()
+
+let env = process.env;
 
 interface ChangeDesc {
 	slogId: Number;
@@ -26,6 +30,7 @@ export class AuthController {
 		@Res() res: Response,
 	) {
 		res.cookie('slogtkn', userData.token, {
+			domain: `.${env.ROOT_DOMAIN}`,
 			expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7),
 			sameSite: 'strict',
 			httpOnly: true
