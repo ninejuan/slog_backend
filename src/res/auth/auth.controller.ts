@@ -7,8 +7,8 @@ import { CallbackUserData } from './decorator/auth.decorator';
 import Auth from 'src/interface/auth.interface';
 import Token from 'src/interface/token.interface';
 import { AuthGuard } from './guards/checkAuth.guard';
-import dotenv from 'dotenv';
-dotenv.config()
+import { config } from 'dotenv';
+config();
 
 let env = process.env;
 
