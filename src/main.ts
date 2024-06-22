@@ -7,6 +7,11 @@ const env = process.env;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+	origin: [env.FE_DOMAIN],
+	credentials: true,
+	exposedHeaders: ['pggtkn', "Authorization"]
+  });
   linkToDatabase();
   if (env.MODE == "DEV") {
 		try {
